@@ -1,51 +1,54 @@
 # More info on config here: https://golangci-lint.run/usage/configuration/#config-file
+
+#Файл .golangci.pipeline.yaml — это конфигурационный файл для инструмента golangci-lint,
+#который используется для статического анализа кода на языке Go. Он позволяет настроить линтеры, их параметры, исключения и формат вывода результатов анализа.
 run:
-  concurrency: 8
-  timeout: 10m
-  issues-exit-code: 1
-  tests: true
+  concurrency: 8          # Количество линтеров, которые будут запускаться параллельно
+  timeout: 10m            # Максимальное время выполнения линтеров (тайм-аут) — 10 минут
+  issues-exit-code: 1     # Код выхода при обнаружении проблем — 1 (ошибка)
+  tests: true             # Включить анализ тестовых файлов (файлы *_test.go)
   issues:
     exclude-files:
-      - \.pb\.go$
-      - \.pb\.gw\.go$
+      - \.pb\.go$         # Исключить файлы, оканчивающиеся на .pb.go (protobuf сгенерированные файлы)
+      - \.pb\.gw\.go$     # Исключить файлы, оканчивающиеся на .pb.gw.go (gateway сгенерированные файлы)
     exclude-dirs:
-      - bin
-      - vendor
-      - var
-      - tmp
-      - .cache
+      - bin               # Исключить директорию bin из анализа
+      - vendor            # Исключить директорию vendor (зависимости)
+      - var               # Исключить директорию var
+      - tmp               # Исключить директорию tmp (временные файлы)
+      - .cache            # Исключить директорию .cache
 
 output:
-  formats: colored-line-number
-  print-issued-lines: true
-  print-linter-name: true
+  formats: colored-line-number  # Формат вывода — цветной, с указанием номера строки
+  print-issued-lines: true      # Выводить строку кода, где найдена проблема
+  print-linter-name: true       # Выводить название линтера, обнаружившего проблему
 
 linters-settings:
   govet:
-    shadow: true
+    shadow: true                # Включить проверку на теневые переменные в govet
   dupl:
-    threshold: 100
+    threshold: 100              # Пороговое значение для дублирования кода (в токенах)
   goconst:
-    min-len: 2
-    min-occurrences: 2
+    min-len: 2                  # Минимальная длина строковых констант для проверки
+    min-occurrences: 2          # Минимальное количество повторений для вынесения в константу
 
 linters:
-  disable-all: true
+  disable-all: true             # Отключить все линтеры по умолчанию
   enable:
-    - errcheck
-    - goconst
-    - goimports
-    - gosec
-    - govet
-    - ineffassign
-    - revive
-    - typecheck
-    - unused
+    - errcheck                  # Включить линтер для проверки необработанных ошибок
+    - goconst                   # Включить линтер для поиска дублирующихся строковых констант
+    - goimports                 # Включить линтер для форматирования импортов
+    - gosec                     # Включить линтер для проверки безопасности кода
+    - govet                     # Включить встроенный статический анализатор govet
+    - ineffassign               # Включить линтер для поиска неэффективных присваиваний
+    - revive                    # Включить линтер для улучшения стиля кода
+    - typecheck                 # Включить линтер для проверки типов
+    - unused                    # Включить линтер для обнаружения неиспользуемого кода
 
 issues:
-  exclude-use-default: false
+  exclude-use-default: false    # Не использовать стандартные исключения, проверять все проблемы
   exclude:
-    - G104 # _ instead of err checks
-    - exported func .* returns unexported type .*, which can be annoying to use
-    - should have a package comment
-    - don't use an underscore in package name
+    - G104 # _ instead of err checks  # Исключить предупреждение G104 о игнорировании ошибок через _
+    - exported func .* returns unexported type .*, which can be annoying to use  # Исключить предупреждение о возвращении неэкспортируемых типов
+    - should have a package comment   # Исключить предупреждение об отсутствии комментария к пакету
+    - don't use an underscore in package name  # Исключить предупреждение об использовании подчеркивания в названии пакета

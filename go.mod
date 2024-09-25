@@ -1,4 +1,4 @@
-module github.com/olezhek28/microservices_course_boilerplate
+module github.com/ANkulagin/golang_client_chat
 
 go 1.22
 
